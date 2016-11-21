@@ -3,6 +3,8 @@
 #include <string.h>
 #include <dirent.h>
 
+void swap(char **array, char *temp, int i);
+
 int main(){
 
 	//Take input (folder with files)
@@ -12,7 +14,7 @@ int main(){
 	char *folderName = malloc(30*sizeof(char));
 	scanf("%s", folderName);
 
-	printf("Folder to merge: %s\n\n", folderName);
+	printf("\nFolder to merge: %s\n", folderName);
 
 	//Find files
 	char **files;
@@ -25,12 +27,10 @@ int main(){
 	DIR *d;
 	struct dirent *dir;
   	d = opendir(folderName);
-  	printf("Files:\n");
   	if (d){
     	while ((dir = readdir(d)) != NULL){
     		char *dot = strrchr(dir->d_name, '.');
 			if (dot && !strcmp(dot, ".txt")){
-				printf("%s\n", dir->d_name);
 				files[filesSize++] = dir->d_name;
 			}
     	}
@@ -38,14 +38,35 @@ int main(){
     }
     printf("Number of files in folder: %d\n", filesSize);
 
-	//Determine Height and Width (Sort files.)
+	//Sort words
+	int done;
+	char *temp = malloc(30*sizeof(char)); 
+	do{
+		done = 1;
+		for(int i = 0; i < filesSize - 1; i++){
+			if(strcmp(files[i], files[i+1]) > 0){
+				swap(files, temp, i);
+				done = 0;
+			}
+		}
+	} while (!done);
+	free(temp);
+
+	printf("Files sorted:\n");
+	for(int k = 0; k < filesSize; k++){
+		printf("%s\n", files[k]);
+	}
+	printf("\n");
+
+	//Determine width and height
 	int width = 0;
 	int height = 0;
+	sscanf (files[filesSize - 1], "part_%d_%d_", &height, &width);
+	width++;
+	height++;
 
-	char ***filesSorted;    
-
-
-
+	printf("Height: %d\n", height);
+	printf("Width: %d\n", width);
 
 	//Read file after file into new file. 
 
@@ -57,4 +78,10 @@ int main(){
 
 
 	return 0;
+}
+
+void swap(char **array, char *temp, int i){
+	strcpy(temp, array[i + 1]);
+	strcpy(array[i + 1], array[i]);
+	strcpy(array[i], temp);
 }

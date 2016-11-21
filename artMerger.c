@@ -38,10 +38,18 @@ int main(){
     }
     printf("Number of files in folder: %d\n", filesSize);
 
+	//Determine Height and Width (Sort files.)
+	int width = 0;
+	int height = 0;
 
-	//Determine Height and Width 
+	char ***filesSorted;    
+
+
+
 
 	//Read file after file into new file. 
+
+
 
 
 

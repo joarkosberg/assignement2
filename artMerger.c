@@ -36,6 +36,10 @@ int main(){
     	}
     	closedir(d);
     }
+    if(filesSize == 0){
+    	printf("Empty folder!\n");
+		exit(EXIT_FAILURE);
+    }
     printf("Number of files in folder: %d\n", filesSize);
 
 	//Sort words
@@ -69,14 +73,27 @@ int main(){
 	printf("Width: %d\n", width);
 
 	//Read file after file into new file. 
+	FILE *writeFile = fopen(strcat(folderName, ".txt"), "w");
+	FILE *rowFiles[width];
+	for (int i = 0; i < width; i++){
+    	printf("%s\n", files[i]);
+    	rowFiles[i] = fopen(files[i], "r");
+	}
+
+	char *line = malloc(30*sizeof(char));
+	for(int i = 0; i < 30; i++){
+		for(int j = 0; j < width; j++){
+			fgets(line, 30*sizeof(char), rowFiles[j]);
+			printf("%s", line);
+		}
+		printf("\n");
+	}
+
+		//fprintf(fil, "a=%d, b=%d\n", a, b);
 
 
 
-
-
-	//
-
-
+	fclose(writeFile);
 	return 0;
 }
 

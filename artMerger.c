@@ -12,17 +12,23 @@ int main(){
 	printf("Please provide a folder:\n");
 
 	char *folderName = malloc(30*sizeof(char));
+	char *folderPreFix = malloc(30*sizeof(char));
+	char *folderTxt = malloc(30*sizeof(char));
 	scanf("%s", folderName);
+	strcpy(folderPreFix, folderName);
+	folderPreFix[strlen(folderName)] = '/';
+	strcpy(folderTxt, folderName);
+	strcat(folderTxt, ".txt"); 
 
 	printf("\nFolder to merge: %s\n", folderName);
 
 	//Find files
 	char **files;
 	int filesSize = 0;
-	int filesCapacity = 20;
+	int filesCapacity = 30;
 	files = malloc(filesCapacity*sizeof(char*));
 	for (int i = 0; i < filesCapacity; i++)
-	    files[i] = malloc(30*sizeof(char));
+	    files[i] = malloc(40*sizeof(char));
 
 	DIR *d;
 	struct dirent *dir;
@@ -31,7 +37,8 @@ int main(){
     	while ((dir = readdir(d)) != NULL){
     		char *dot = strrchr(dir->d_name, '.');
 			if (dot && !strcmp(dot, ".txt")){
-				files[filesSize++] = dir->d_name;
+				strcpy(files[filesSize], dir->d_name);
+				filesSize++;
 			}
     	}
     	closedir(d);
@@ -44,7 +51,7 @@ int main(){
 
 	//Sort words
 	int done;
-	char *temp = malloc(30*sizeof(char)); 
+	char *temp = malloc(40*sizeof(char)); 
 	do{
 		done = 1;
 		for(int i = 0; i < filesSize - 1; i++){
@@ -73,27 +80,35 @@ int main(){
 	printf("Width: %d\n", width);
 
 	//Read file after file into new file. 
-	FILE *writeFile = fopen(strcat(folderName, ".txt"), "w");
-	FILE *rowFiles[width];
+	FILE *outputFile = fopen(folderTxt, "w");
+	FILE ** inputFiles = malloc(width * sizeof(FILE*));
+
+
+
+
+
 	for (int i = 0; i < width; i++){
-    	printf("%s\n", files[i]);
-    	rowFiles[i] = fopen(files[i], "r");
+    	printf("Fil: %s\n", files[i]);
+    	inputFiles[i] = fopen(files[i], "r");
 	}
 
 	char *line = malloc(30*sizeof(char));
 	for(int i = 0; i < 30; i++){
 		for(int j = 0; j < width; j++){
-			fgets(line, 30*sizeof(char), rowFiles[j]);
+			fgets(line, 30*sizeof(char), inputFiles[j]);
 			printf("%s", line);
 		}
 		printf("\n");
 	}
 
+
 		//fprintf(fil, "a=%d, b=%d\n", a, b);
 
 
 
-	fclose(writeFile);
+	free(inputFiles);
+	fclose(outputFile);
+
 	return 0;
 }
 

@@ -88,6 +88,10 @@ int main(){
    		sprintf(theFile, "%s%s", folderPreFix, files[i]);
    		inputFiles[i] = fopen(theFile, "r");
    	}
+   	free(theFile);
+   	for(int i = 0; i < filesCapacity; i++)
+		free(files[i]);
+   	free(files);
 
    	//Read art files
 	char *line = malloc(35*sizeof(char));
@@ -95,21 +99,24 @@ int main(){
 		for(int j = 0; j < 30; j++){ //Line height
 			for(int k = 0; k < width; k++){ //Total Width
 				fgets(line, 31*sizeof(char), inputFiles[i + (k*height)]);
-				line[strlen(line)-1] = 0;
+				line[strlen(line)-1] = 0; //Remove new line at ending
+				fprintf(outputFile, "%s", line);
 				printf("%s", line);
 			}
+			fprintf(outputFile, "\n");
 			printf("\n");
 		}
 	}
+	free(line);
 
 
-		//fprintf(fil, "a=%d, b=%d\n", a, b);
-
+	free(folderName);
+	free(folderPreFix);
+	free(folderTxt);
 
 
 	free(inputFiles);
 	fclose(outputFile);
-
 	return 0;
 }
 

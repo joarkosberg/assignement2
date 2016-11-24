@@ -1,0 +1,1 @@
+void sortWords (char **files, int filesSize, int fileNameSize);

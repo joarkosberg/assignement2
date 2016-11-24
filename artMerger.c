@@ -28,7 +28,7 @@ int main(){
 	int filesCapacity = 30;
 	files = malloc(filesCapacity*sizeof(char*));
 	for (int i = 0; i < filesCapacity; i++)
-	    files[i] = malloc(40*sizeof(char));
+	    files[i] = malloc(30*sizeof(char));
 
 	DIR *d;
 	struct dirent *dir;
@@ -51,7 +51,7 @@ int main(){
 
 	//Sort words
 	int done;
-	char *temp = malloc(40*sizeof(char)); 
+	char *temp = malloc(30*sizeof(char)); 
 	do{
 		done = 1;
 		for(int i = 0; i < filesSize - 1; i++){
@@ -72,33 +72,34 @@ int main(){
 	//Determine width and height
 	int width = 0;
 	int height = 0;
-	sscanf (files[filesSize - 1], "part_%d_%d_", &height, &width);
+	sscanf (files[filesSize - 1], "part_%d_%d_", &width, &height);
 	width++;
 	height++;
 
 	printf("Height: %d\n", height);
 	printf("Width: %d\n", width);
 
-	//Read file after file into new file. 
+	//Open files
 	FILE *outputFile = fopen(folderTxt, "w");
-	FILE ** inputFiles = malloc(width * sizeof(FILE*));
+	FILE **inputFiles = malloc(filesSize * sizeof(FILE*));
 
+	char *theFile = malloc(30*sizeof(char));
+	for (int i = 0; i < filesSize; i++){
+   		sprintf(theFile, "%s%s", folderPreFix, files[i]);
+   		inputFiles[i] = fopen(theFile, "r");
+   	}
 
-
-
-
-	for (int i = 0; i < width; i++){
-    	printf("Fil: %s\n", files[i]);
-    	inputFiles[i] = fopen(files[i], "r");
-	}
-
-	char *line = malloc(30*sizeof(char));
-	for(int i = 0; i < 30; i++){
-		for(int j = 0; j < width; j++){
-			fgets(line, 30*sizeof(char), inputFiles[j]);
-			printf("%s", line);
+   	//Read art files
+	char *line = malloc(35*sizeof(char));
+	for(int i = 0; i < height; i++){ //Total height
+		for(int j = 0; j < 30; j++){ //Line height
+			for(int k = 0; k < width; k++){ //Total Width
+				fgets(line, 31*sizeof(char), inputFiles[i + (k*height)]);
+				line[strlen(line)-1] = 0;
+				printf("%s", line);
+			}
+			printf("\n");
 		}
-		printf("\n");
 	}
 
 

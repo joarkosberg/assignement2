@@ -1,0 +1,1 @@
+int findTxtFiles (char **files, char *folderName);

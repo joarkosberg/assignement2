@@ -1,0 +1,1 @@
+void mergeFiles (int filesSize, int fileNameSize, char *folderName, char **files);
